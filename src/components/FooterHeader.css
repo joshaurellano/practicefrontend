@@ -4,8 +4,11 @@
     left: 0;
     width: 100%;
     padding: 10px 0;
-    background-color: #f8f9fa;
+    background-color: #4A628A;
     text-align: center;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   }
-  
+.header {
+  margin-left: 20px;
+  height: 112px;
+}

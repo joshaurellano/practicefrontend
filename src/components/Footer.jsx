@@ -1,10 +1,10 @@
 import React from 'react';
-import './Footer.css';
+import './FooterHeader.css';
 
 const Footer = () => {
     return (
         <footer className = "footer">
-            <p>Created by Joshua Anthony Aurellano||2024</p>
+            <p>Created by Joshua Anthony Aurellano  ||   2024</p>
         </footer>
     );
 }

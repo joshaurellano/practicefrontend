@@ -2,21 +2,23 @@ import React, {useState} from 'react';
 import { loginUser,registerUser } from '../api';
 import { useNavigate } from 'react-router-dom';
 import './Authentication.css'
-import Form from 'react-bootstrap/Form';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Navbar from 'react-bootstrap/Navbar';
-import Modal from 'react-bootstrap/Modal';
-import './Style.css';
+import './SocialMedia_Style.css';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Form,FloatingLabel,Button,Container,Navbar,Modal } from 'react-bootstrap';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const[error, setError] = useState(null);
 
-    const [show, setShow] = useState(false);
+    /*For Password Visibility*/
+    const [ showPassword, setShowPasword ] = useState(false);
+    const handlePasswordToggle = () => {
+        setShowPasword(!showPassword)
+    };
 
+    /*For Registration Modal*/
+    const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
      
@@ -30,7 +32,9 @@ const Login = () => {
             window.alert('Login Successful');
 
             sessionStorage.setItem('authToken',response.token);
-
+            if(response) {
+                sessionStorage.setItem('username',username);
+            }
             navigate('/home');
             }
             else {
@@ -46,7 +50,7 @@ const Login = () => {
 return(
     <>
     <Navbar bg="light" data-bs-theme="light">
-        <Container>
+        <Container style={{backgroundColor:"#DFF2EB"}}>
             <div className="d-flex justify-content-center gap-3 mt-4">
                 <Navbar.Text>Find me on Social Media </Navbar.Text>
                 <a href="https://www.facebook.com/aurellanojoshuaanthony/" target="_blank" rel="noopener noreferrer" className="facebook-icon">
@@ -64,19 +68,40 @@ return(
                 </Button>
         </Container>
         </Navbar>
-    <div className='container'>
+    <div className='container' style={{height:"100vh", paddingBottom:"200px"}}>
         <div className='form-box'>
             <h2>Login</h2>
             <Form onSubmit={handleLogin}>
                 <Form.Group className="mb-3" controlId="formGroupUsername">
                     <FloatingLabel label="Username" className="mb-3">
-                    <Form.Control type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    <Form.Control type="text" 
+                    placeholder="Username" 
+                    value={username} 
+                    onChange={(e) => setUsername(e.target.value)}
+                    required />
                     </FloatingLabel>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formGroupPassword">
-                    <FloatingLabel label="Password" className="mb-3">
-                    <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    </FloatingLabel>
+                    <div style={{ position: 'relative' }}>
+                        <FloatingLabel label="Password" className="mb-3">
+                        <Form.Control
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        style={{ paddingRight: '3rem' }}
+                        required/>
+                        </FloatingLabel>
+                    <div onClick={handlePasswordToggle}
+                    style={{
+                    position: 'absolute',
+                    right: '10px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    cursor: 'pointer',}}>
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </div>
+                        </div>
                 </Form.Group>
                 <div className="d-flex align-items-center justify-content-between">
                 <Button type="submit">Submit</Button>
@@ -97,23 +122,52 @@ const Registration = ({ show, handleClose }) => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [repassword, setRePassword] = useState('');
     const [error,setError] = useState(null);
+
+    const [ showPassword, setShowPassword ] = useState(false);
+    const handlePasswordToggle = () => {
+        setShowPassword(!showPassword)
+    };
+
+    const [ showRePassword, setShowRePassword ] = useState(false);
+    const handleRePasswordToggle = () => {
+        setShowRePassword(!showRePassword)
+    };
+
+    const handleRePassword = async (e) => {
+        setRePassword(e.target.value);
+            if (password !== e.target.value) {
+            setError('Passwords do not match');
+        } else {
+            setError(null);
+        }
+           
+    }
 
     const handleRegister = async (e) => {
         e.preventDefault();
+
+        if(password!==repassword){
+            setError('Passwords do not match');
+            return;
+        };
+
+        setError(null);
         try {
             const response = await registerUser ({fullname,phone_number,email,username,password});
             if(response){
                 console.log('Success');
                 window.alert('Successfully registered');
+
+                handleClose();
                 
                 setFullname('');
                 setPhonenumber('');
                 setEmail('');
                 setUsername('');
                 setPassword('');
-
-                handleClose();
+                setRePassword('');
             }
             else {
                 throw new Error('Registration failed');
@@ -129,7 +183,7 @@ const Registration = ({ show, handleClose }) => {
                 <Modal.Header closeButton>
                     <Modal.Title>Register</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className="modal-scrollable-body">
                 <form onSubmit={handleRegister}>
                     <Form.Group className="mb-3">
                         <Form.Label>Fullname</Form.Label>
@@ -162,12 +216,46 @@ const Registration = ({ show, handleClose }) => {
                    </Form.Group>
                    <Form.Group>
                         <Form.Label>Password</Form.Label>
+                        <div style={{ position: 'relative' }}>
                         <Form.Control
-                        type="password"
+                        type={showPassword ? "password":"text"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}required/>
-                   </Form.Group> 
-                   <Button variant="primary" className="w-100" type="submit">Register</Button>
+                        <div 
+                            onClick={handlePasswordToggle}
+                            style={{
+                            position: 'absolute',
+                            right: '15px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            cursor: 'pointer',
+                            }}>
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </div>
+                        </div>
+                   </Form.Group>
+                   <Form.Group>
+                        <Form.Label>Re enter your Password</Form.Label>
+                        <div style={{ position: 'relative' }}>
+                        <Form.Control
+                        type={showRePassword ? "password":"text"}
+                        value={repassword}
+                        onChange={handleRePassword}required/>
+                        <div 
+                            onClick={handleRePasswordToggle}
+                            style={{
+                            position: 'absolute',
+                            right: '15px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            cursor: 'pointer',
+                            }}>
+                            {showRePassword ? <FaEyeSlash /> : <FaEye />}
+                        </div>
+                        </div>
+                   </Form.Group>
+                   
+                   <Button variant="primary" className="w-100" type="submit" disabled={!!error}>Register</Button>
                 </form>
                 {error && <p style={{color:'red'}}>{error}</p>}
             </Modal.Body>

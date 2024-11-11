@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ddd;
+    background-color: #B9E5E8;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -10,10 +10,10 @@
 .form-box {
     width: 300px;
     padding: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid black;
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgb(248, 245, 245);
-    background-color: #f7f3f3;
+    background-color: /*#f7f3f3*/#DFF2EB;
     text-align: center;
     color: rgb(5, 5, 5);
 }
@@ -38,3 +38,9 @@ input[type="tel"] {
     border: 1px solid #0f0f0f;
     color: rgb(15, 15, 15);
 } 
+
+.modal-scrollable-body {
+    max-height: 400px; 
+    overflow-y: auto;
+    padding-right: 10px; 
+}
