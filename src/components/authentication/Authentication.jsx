@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { loginUser,registerUser } from '../api';
 import { useNavigate } from 'react-router-dom';
 import './Authentication.css'
 import './SocialMedia_Style.css';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Form,FloatingLabel,Button,Container,Navbar,Modal } from 'react-bootstrap';
+import { Form,FloatingLabel,Button,Container,Navbar,Modal,Spinner } from 'react-bootstrap';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -23,6 +23,7 @@ const Login = () => {
     const handleShow = () => setShow(true);
      
     const navigate = useNavigate ();
+
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
@@ -104,7 +105,7 @@ return(
                         </div>
                 </Form.Group>
                 <div className="d-flex align-items-center justify-content-between">
-                <Button type="submit">Submit</Button>
+                <Button type="submit"className='w-100'>Submit</Button>
                 <a href="/forgot-password" className="ms-3 text-decoration-none">Forgot Password?</a>
                 </div>
             </Form>
@@ -180,7 +181,7 @@ const Registration = ({ show, handleClose }) => {
         return (
             <div>
             <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
+                <Modal.Header closeButton className="modal-header">
                     <Modal.Title>Register</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="modal-scrollable-body">

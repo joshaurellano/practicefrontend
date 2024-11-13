@@ -34,7 +34,7 @@ const Page = () => {
     return (   
         <div className="page-style">
             <h1 className="page-font1" style={{marginTop:"10px"}}>
-                Simple Project Title</h1>
+                Simple Project</h1>
                 <br />
                 <p className="page-font2"> Use this application to add, update, fetch and delete Department, Courses and Students record</p>
                 <br />
